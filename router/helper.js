@@ -28,15 +28,20 @@ async function recipesByUser(id) {
 function find(table) {
   return db(table) 
 }
-function add(addedObject, table) { 
-  return( 
-    db(table) 
-    .insert(addedObject) 
-    .then( id => {
-      return findById(id[0], table)
-    })
-  )
+async function add(addedObject) { 
+  const { title, user_id, instructions, ingredients} = addedObject
+  const id = await db('recipes').insert({title, user_id})
+  
+  instructions.forEach(async item => {
+   await db('instructions').insert({...item, recipe_id: id[0]})
+  }) 
+  ingredients.forEach(async item => {
+    await db("recipe_ingredients").insert({...item, recipe_id: id[0]})
+  })
+
+  return "you did it"
 }
+
 function findById(id, table) {
   return db(table).where({ id }).first() 
 }
