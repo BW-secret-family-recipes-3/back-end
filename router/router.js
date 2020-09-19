@@ -31,8 +31,8 @@ router.post('/recipes', (req, res) => {
 })
 //edit recipes
 router.put('/recipes/:id', (req, res) => {
-  const id = req.params.id
-  helper.update(req.body, id, 'TABLE')
+  const id = Number(req.params.id)
+  helper.update(req.body, id)
   .then(rez => res.status(200).json(rez))
   .catch(err => res.status(500).json({status: 500, err}))
 })
