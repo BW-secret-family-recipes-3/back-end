@@ -16,14 +16,21 @@ router.get('/:id/recipes', (req, res) => {
   .then(rez => res.status(200).json(rez))
   .catch(err => res.status(500).json({status: 500, err}))
 })
-
-router.post('/', (req, res) => {
-  helper.add(req.body, 'TABLE')
-  .then(rez => res.status(200).json(rez))
-  .catch(err => res.status(500).json({status: 500, err}))
+//post recipes
+router.post('/recipes', (req, res) => {
+  //required title, user_id
+  const { user_id, title } = req.body
+  
+  if (user_id && title) {
+    helper.add(req.body)
+    .then(rez => {res.status(200).json(rez)})
+    .catch(err => res.status(500).json({status: 500, err}))
+  } else {
+    res.status(401).json({message: 'Must have a title and user_id'})
+  }
 })
-
-router.put('/:id', (req, res) => {
+//edit recipes
+router.put('/recipes/:id', (req, res) => {
   const id = req.params.id
   helper.update(req.body, id, 'TABLE')
   .then(rez => res.status(200).json(rez))
