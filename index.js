@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 const server = require('./server')
 const chalk = require('chalk')
 const PORT = process.env.PORT || 5000
