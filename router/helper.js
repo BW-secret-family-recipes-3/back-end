@@ -1,3 +1,4 @@
+const { where } = require('../data/db-config');
 const db = require('../data/db-config')
 
 function findBy(filter) {
@@ -24,10 +25,6 @@ async function recipesByUser(id) {
   return newArray
 }
 
-// BOILERPLATE
-function find(table) {
-  return db(table) 
-}
 async function add(addedObject) { 
   const { title, user_id, instructions, ingredients} = addedObject
   const id = await db('recipes').insert({title, user_id})
@@ -39,20 +36,45 @@ async function add(addedObject) {
     await db("recipe_ingredients").insert({...item, recipe_id: id[0]})
   })
 
-  return "you did it"
+  return "you did the thing"
+}
+
+// update recipes
+async function update(changes, id) {
+  const { title, instructions, ingredients } = changes
+  
+  if (title) {
+     db('recipes')
+    .where("id", "=", id).update("title", title)
+  }
+  
+  if (instructions) {
+   await db('instructions').where("recipe_id", "=", id).del()
+   
+    instructions.forEach(async item => {
+      await db('instructions').insert({...item, recipe_id: id})
+    })
+  } 
+
+  if (ingredients) {
+   await db('recipe_ingredients').where("recipe_id", "=", id).del()
+
+    ingredients.forEach(async item => {
+      await db("recipe_ingredients").insert({...item, recipe_id: id})
+    })
+  }
+  return 'Successfully updated Recipe'
+  
+}
+// BOILERPLATE
+function find(table) {
+  return db(table) 
 }
 
 function findById(id, table) {
   return db(table).where({ id }).first() 
 }
-function update(changes, id, table) {
-  return db(table) 
-  .update(changes)
-  .where({ id })
-  .then( () => {
-      return findById(id, table)
-  })
-}
+
 function remove(id, table) {
   let removed
   findById(id, table).then(rez => removed=rez)
