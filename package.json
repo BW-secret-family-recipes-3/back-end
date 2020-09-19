@@ -4,8 +4,7 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "server": "nodemon index.js",
-    "start": "node index.js",
+    "bcryptjs": "^2.4.3",
     "chalk": "^4.1.0",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
@@ -21,7 +20,9 @@
     "nodemon": "^2.0.4"
   },
   "scripts": {
-    "test": "jest -- watch"
+    "test": "jest -- watch",
+    "server": "nodemon index.js",
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",

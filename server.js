@@ -4,6 +4,7 @@ const cors = require("cors")
 const authRouter = require("./auth/auth-router")
 const usersRouter = require("./router/router")
 const restricted = require("./auth/restricted-middleware.js")
+
 const server = express()
 server.use(helmet())
 server.use(express.json())
@@ -14,7 +15,7 @@ server.use(
     })
 )
 server.use("/api/auth", authRouter)
-server.use("/api/users", usersRouter)
+server.use("/api/users", restricted, usersRouter)
 server.get("/", (req, res) => {
     res.status(200).json({ Victor_Frankenstein: "It LIVEEEESSSSSSS" })
 })
