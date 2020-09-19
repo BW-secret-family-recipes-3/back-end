@@ -16,9 +16,9 @@ router.get('/:id/recipes', (req, res) => {
   .then(rez => res.status(200).json(rez))
   .catch(err => res.status(500).json({status: 500, err}))
 })
-//post recipes
+
+// ADD A NEW RECIPE
 router.post('/recipes', (req, res) => {
-  //required title, user_id
   const { user_id, title } = req.body
   
   if (user_id && title) {
@@ -29,7 +29,8 @@ router.post('/recipes', (req, res) => {
     res.status(401).json({message: 'Must have a title and user_id'})
   }
 })
-//edit recipes
+
+// EDIT A RECIPE
 router.put('/recipes/:id', (req, res) => {
   const id = Number(req.params.id)
   helper.update(req.body, id)
@@ -37,11 +38,14 @@ router.put('/recipes/:id', (req, res) => {
   .catch(err => res.status(500).json({status: 500, err}))
 })
 
-router.delete('/:id', (req, res) => {
-  const id = req.params.id
-  helper.remove(id, 'TABLE')
+// DELETE A RECIPE AND ASSOCIATED INGREDIENTS AND INSTRUCTIONS
+router.delete('/recipes/:id', (req, res) => {
+  const id = Number(req.params.id)
+  helper.remove(id)
   .then(rez => res.status(200).json(rez))
   .catch(err => res.status(500).json({status: 500, err}))
 })
+
+
 
 module.exports = router

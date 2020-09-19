@@ -5,6 +5,13 @@ function findBy(filter) {
   return db('users').where(filter)
 }
 
+// ADD USER
+async function addUser(user, table) {
+  await db(table).insert(user);
+  return db('users').where({ username: user.username })
+}
+
+// GET ALL RECIPES/INSTRUCTIONS/INGREDIENTS FOR LOGGED IN USER
 async function recipesByUser(id) {
   const recipes = await db('recipes').where({ user_id: id })
   const instructions = await db('instructions')
@@ -25,6 +32,7 @@ async function recipesByUser(id) {
   return newArray
 }
 
+// ADD A NEW RECIPE
 async function add(addedObject) { 
   const { title, user_id, instructions, ingredients} = addedObject
   const id = await db('recipes').insert({title, user_id})
@@ -36,10 +44,10 @@ async function add(addedObject) {
     await db("recipe_ingredients").insert({...item, recipe_id: id[0]})
   })
 
-  return "you did the thing"
+  return "Recipe added"
 }
 
-// update recipes
+// EDIT A RECIPE
 async function update(changes, id) {
   const { title, instructions, ingredients } = changes
   
@@ -63,32 +71,21 @@ async function update(changes, id) {
       await db("recipe_ingredients").insert({...item, recipe_id: id})
     })
   }
-  return 'Successfully updated Recipe'
+  return 'Recipe updated'
   
 }
-// BOILERPLATE
-function find(table) {
-  return db(table) 
+
+// DELETE A RECIPE
+async function remove(id) {
+ await db('recipes').where({ id }).del();
+ await db('instructions').where('recipe_id', '=', id).del();
+ await db('recipe_ingredients').where('recipe_id', '=', id).del();
+ return 'Recipe terminated'
 }
 
-function findById(id, table) {
-  return db(table).where({ id }).first() 
-}
-
-function remove(id, table) {
-  let removed
-  findById(id, table).then(rez => removed=rez)
-  return db(table) 
-    .where({ id })
-    .del()
-    .then(() => {
-      return removed
-    })
-}
 module.exports ={
-  find,
-  findById,
   add,
+  addUser,
   update,
   remove,
   findBy,

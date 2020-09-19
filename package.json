@@ -13,14 +13,15 @@
     "jsonwebtoken": "^8.5.1",
     "kiss": "^0.2.4",
     "knex": "^0.21.5",
-    "sqlite3": "^5.0.0"
+    "sqlite3": "^5.0.0",
+    "supertest": "^4.0.2"
   },
   "devDependencies": {
     "jest": "^26.4.2",
     "nodemon": "^2.0.4"
   },
   "scripts": {
-    "test": "jest -- watch",
+    "test": "jest --watch --verbose",
     "server": "nodemon index.js",
     "start": "node index.js"
   },
