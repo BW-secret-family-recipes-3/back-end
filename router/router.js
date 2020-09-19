@@ -9,7 +9,7 @@ router.get('/user', (req, res) => {
   .catch(err => res.status(500).json({status: 500, err}))
 })
 
-// GET ALL RECIPES FOR LOGGED IN USER
+// GET ALL RECIPES/INSTRUCTIONS/INGREDIENTS FOR LOGGED IN USER
 router.get('/:id/recipes', (req, res) => {
   const id = req.params.id
   helper.recipesByUser(id)

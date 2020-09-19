@@ -6,12 +6,20 @@ function findBy(filter) {
 
 async function recipesByUser(id) {
   const recipes = await db('recipes').where({ user_id: id })
-  const instructions = await db.select('*').from('instructions')
-      .join('recipes', 'recipe_id', 'recipes.id');
+  const instructions = await db('instructions')
+      .where({ user_id: id })
+      .select('instructions.step_number', 'instructions.step_description', 'recipe_id')
+      .orderBy('step_number');
+  const ingredients = await db('recipe_ingredients')
+    .join('recipes', 'recipes.id', 'recipe_ingredients.recipe_id')
+    .where({ user_id: id })
+    .select('recipe_ingredients.name', 'recipe_ingredients.measurement', 'recipe_ingredients.recipe_id')
+
   let newArray = [];
   recipes.forEach(recipe => {
-    let instructionsArray = instructions.filter(item => item.recipe_id === recipe.id)
-    newArray.push({recipe, instructionsArray})
+    let instructionsArray = instructions.filter(item => item.recipe_id === recipe.id);
+    let ingredientsArray = ingredients.filter(item => item.recipe_id === recipe.id)
+    newArray.push({recipe, instructions: instructionsArray, ingredients: ingredientsArray})
   })
   return newArray
 }
