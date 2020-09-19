@@ -1,15 +1,15 @@
-
 const bcryptjs = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 const router = require("express").Router()
 const helper = require("../router/helper")
+
 router.post("/register", (req, res) => {
   const credentials = req.body
-  if (isValid(credentials)) {
+  if (credentials.username && credentials.password) {
     const rounds = process.env.BCRYPT_ROUNDS || 8
     const hash = bcryptjs.hashSync(credentials.password, rounds)
     credentials.password = hash
-    helper.add(credentials)
+    helper.add(credentials, 'users')
     .then(user => {
       const token = makeJwt(user)
       res.status(201).json({ data: user, token })
@@ -25,7 +25,7 @@ router.post("/register", (req, res) => {
 })
 router.post("/login", (req, res) => {
   const { username, password } = req.body
-  if (isValid(req.body)) {
+  if (username && password) {
     helper.findBy({ username: username })
     .then(([user]) => {
       if (user && bcryptjs.compareSync(password, user.password)) {
