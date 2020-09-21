@@ -12,11 +12,7 @@ REGISTER, "/auth/register"
             "name": [optional]
         }
 
-    Test account is 
-        {
-            "username": "TestingNew"
-            "password": "Testing123"
-        }
+    Database is empty, create your own testing account
 
 LOGIN, "/auth/login"
     `req.body` must be 
@@ -66,7 +62,11 @@ ADD A NEW RECIPE, `post`, "/users/recipes"
                     "measurement": [string]
                 },
                 ...as many ingredients as you have
-            ]
+            ],
+
+            "category": [string],
+
+            "source": [string]
 
         }
 
