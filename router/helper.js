@@ -1,4 +1,4 @@
-const { where } = require('../data/db-config');
+
 const db = require('../data/db-config')
 
 function findBy(filter) {
@@ -13,7 +13,9 @@ async function addUser(user, table) {
 
 // GET ALL RECIPES/INSTRUCTIONS/INGREDIENTS FOR LOGGED IN USER
 async function recipesByUser(id) {
-  const recipes = await db('recipes').where({ user_id: id })
+  const recipes = await db('recipes')
+  .where({ user_id: id })
+  
   const instructions = await db('instructions')
       .where({ user_id: id })
       .select('instructions.step_number', 'instructions.step_description', 'recipe_id')
@@ -34,8 +36,8 @@ async function recipesByUser(id) {
 
 // ADD A NEW RECIPE
 async function add(addedObject) { 
-  const { title, user_id, instructions, ingredients} = addedObject
-  const id = await db('recipes').insert({title, user_id})
+  const { title, category, source, user_id, instructions, ingredients} = addedObject
+  const id = await db('recipes').insert({title, user_id, category, source})
   
   instructions.forEach(async item => {
    await db('instructions').insert({...item, recipe_id: id[0]})
@@ -49,13 +51,23 @@ async function add(addedObject) {
 
 // EDIT A RECIPE
 async function update(changes, id) {
-  const { title, instructions, ingredients } = changes
-  
+  const { title, category, source, instructions, ingredients } = changes
+   
   if (title) {
      db('recipes')
     .where("id", "=", id).update("title", title)
   }
-  
+
+  if (category) {
+    db('recipes')
+   .where("id", "=", id).update("category", category)
+  }
+
+  if (source) {
+    db('recipes')
+  .where("id", "=", id).update("source", source)
+  }
+
   if (instructions) {
    await db('instructions').where("recipe_id", "=", id).del()
    
