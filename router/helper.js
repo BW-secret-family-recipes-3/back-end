@@ -54,17 +54,17 @@ async function update(changes, id) {
   const { title, category, source, instructions, ingredients } = changes
    
   if (title) {
-     db('recipes')
+  await db('recipes')
     .where("id", "=", id).update("title", title)
   }
 
   if (category) {
-    db('recipes')
+  await db('recipes')
    .where("id", "=", id).update("category", category)
   }
 
   if (source) {
-    db('recipes')
+  await db('recipes')
   .where("id", "=", id).update("source", source)
   }
 
@@ -83,15 +83,15 @@ async function update(changes, id) {
       await db("recipe_ingredients").insert({...item, recipe_id: id})
     })
   }
+
   return 'Recipe updated'
-  
 }
 
 // DELETE A RECIPE
 async function remove(id) {
- await db('recipes').where({ id }).del();
- await db('instructions').where('recipe_id', '=', id).del();
- await db('recipe_ingredients').where('recipe_id', '=', id).del();
+  await db('recipe_ingredients').where('recipe_id', '=', id).del();
+  await db('instructions').where('recipe_id', '=', id).del();
+  await db('recipes').where({ id }).del();
  return 'Recipe terminated'
 }
 
