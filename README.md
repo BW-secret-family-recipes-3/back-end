@@ -37,9 +37,11 @@ ADD A NEW RECIPE, `post`, "/users/recipes"
     `req.body` must be 
         {
             "title": [string],
-
+            "category": [string],
+            "source": [string],
+            
             "user_id": [integer],
-
+            
             "instructions": [
                 {
                     "user_id": [number],
