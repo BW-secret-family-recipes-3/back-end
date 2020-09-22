@@ -15,12 +15,14 @@ router.post("/register", (req, res) => {
       res.status(201).json({ data: user, token })
     })
     .catch(error => {
-      res.status(500).json({ message: error.message })
+      res.status(401).json({ message: 'username already exists' })
     })
-  } else {
+  } else if (!user) {
     res.status(400).json({
       message: "please provide username and password and the password shoud be alphanumeric",
     })
+  } else {
+    res.status(500).json({message: error.message})
   }
 })
 router.post("/login", (req, res) => {
