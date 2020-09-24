@@ -56,7 +56,7 @@ function makeJwt({ id, username, role }) {
     jwtSecret: process.env.JWT_SECRET || "is it secret, is it safe?",
   }
   const options = {
-    expiresIn: "8 hours",
+    expiresIn: "3 days",
   }
   return jwt.sign(payload, config.jwtSecret, options)
 }
